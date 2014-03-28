@@ -1,37 +1,20 @@
-/*
- ============================================================================
- Name        : main.c
- Author      : Geovane Fedrecheski
- Version     : 0.0.1
- Copyright   : This software is licensed under MIT license - 
- 				(http://opensource.org/licenses/MIT)
- Description : 
- ============================================================================
- */
-
-#include <stdio.h>
+/* Copyright © 2014 Geovane Fedrecheski <geonnave@gmail.com> */
 #include <stdlib.h>
-#include <time.h>
-#include <string.h>
-#include "../../../array_int/array_int.h"
+
 #include "knapsack.h"
+
+#define DEFAULT_FILENAME "../data/test1.in"
 
 int main(int argc, char *argv[]) 
 {
-	char *filename;
-	int i, n, k;
-	int *x;
-	k_obj *objs;
-
-	if (argv[1]) 
-		filename = argv[1];
-	else
-		filename = "../data/test1.in";
-
-	open_problem(filename, &n, &k, &objs);
-
-	solve_problem(n, k, &objs, &x);
-
-	free(objs);
+	const char *filename = (argc > 1)? argv[1]: DEFAULT_FILENAME;
+	struct problem_t problem;
+	
+	knapsack_init(&problem);
+	if (knapsack_open(filename, &problem)) {
+		knapsack_solve(&problem);
+		knapsack_print_solution(&problem);
+	}
+	knapsack_free(&problem);
 	return EXIT_SUCCESS;
 }

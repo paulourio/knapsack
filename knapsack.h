@@ -1,27 +1,24 @@
-/*
- ============================================================================
- Name        : main.c
- Author      : Geovane Fedrecheski
- Version     : 0.0.1
- Copyright   : This software is licensed under MIT license - 
- 				(http://opensource.org/licenses/MIT)
- Description : 
- ============================================================================
- */
+/* Copyright © 2014 Geovane Fedrecheski <geonnave@gmail.com> */
+#ifndef KNAPSACK_H_
+#define KNAPSACK_H_
 
-#ifndef KNAPSACK_H_INCLUDED
-#define KNAPSACK_H_INCLUDED
+struct object_t;
 
-typedef struct KObj
-{
-	float p;
-	float v;
-	char *name;
-} k_obj;
+struct problem_t {
+    int n;   /* Object count */
+    int k;   /* Knapsack capacity */
+    int* x;  /* Solution */
+    struct object_t *objs;  /* Object list */
+};
 
-float coef(k_obj obj);
-void open_problem(char *filename, int *n, int *k, k_obj **obj);
-void solve_problem(int n, int k, k_obj **objs, int **x);
-void sel_sort(int n, k_obj ***objs);
+extern void knapsack_init(struct problem_t *p);
 
-#endif /* KNAPSACK_H_INCLUDED */
+extern void knapsack_free(struct problem_t *p);
+
+extern int knapsack_open(const char *filename, struct problem_t *p);
+
+extern void knapsack_solve(struct problem_t *p);
+
+extern void knapsack_print_solution(const struct problem_t *p);
+
+#endif /* KNAPSACK_H_ */
