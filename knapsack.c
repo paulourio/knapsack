@@ -17,7 +17,7 @@ struct object_t {
 void knapsack_init(struct problem_t *p)
 {
 	assert(p != NULL);
-	memset(p, 1, sizeof(*p));
+	memset(p, 0, sizeof(*p));
 }
 
 static int read_object(FILE *fp, struct object_t *obj)
@@ -44,9 +44,12 @@ int knapsack_open(const char *filename, struct problem_t *p)
 	p->objs = malloc(sizeof(p->objs[0]) * ((size_t) p->n));
 	assert(p->objs != NULL);
 
-	for (i = 0; i < p->n; i++)
-		if (!read_object(fp, &p->objs[i]))
+	for (i = 0; i < p->n; i++) {
+		if (!read_object(fp, &p->objs[i])) {
+			fclose(fp);
 			return 0;
+		}
+	}
 	fclose(fp);
 	return 1;
 }
@@ -78,7 +81,7 @@ static void selection_sort(struct problem_t *p)
 		
 		min = i;
 		for (j = i + 1; j < p->n; ++j)
-			if (compare_objects(&p->objs[i], &p->objs[j]) > 0)
+			if (compare_objects(&p->objs[j], &p->objs[i]) < 0)
 				min = j;
 		if (min != i) {
 			struct object_t aux;
